@@ -1,6 +1,13 @@
 # COBWEB 2
 COBWEB (Complexity & Organized Behaviour Within Environmental Bounds) is a computer simulation model which can be used for research in a variety of fields such as ecology, health, psychology, economic geography, climate change impacts and ethics.
 
+## 2024 experimental version
+- Simulation extension to make agents generate other agents as waste
+- ongoing modifications to simulate wormholes, space-time, etc.
+  
+
+
+
 ### Running COBWEB
 * Java is required, you can get it here: https://java.com/download/
 * Get the latest COBWEB jar file: https://github.com/COBWEB-ca/cobweb2/releases
