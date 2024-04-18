@@ -2,8 +2,6 @@
 // Developed by Bala Venkataraman
 
 package org.cobweb.cobweb2.plugins.vectorfield;
-
-import com.sun.org.apache.bcel.internal.generic.MONITORENTER;
 import javafx.util.Pair;
 import org.cobweb.cobweb2.Simulation;
 import org.cobweb.cobweb2.core.*;
