@@ -164,15 +164,8 @@ public class CobwebApplicationRunner {
 				return;
 			}
 
-			String tempdir = System.getProperty("java.io.tmpdir");
-			String sep = System.getProperty("file.separator");
-			if (!tempdir.endsWith(sep))
-				tempdir = tempdir + sep;
-
-			inputFileName = CobwebApplication.INITIAL_OR_NEW_INPUT_FILE_NAME;
+			inputFileName = "initialFile.xml";
 			File testFile = new File(inputFileName);
-			if (! (testFile.exists() && testFile.canWrite()))
-				inputFileName = tempdir + CobwebApplication.INITIAL_OR_NEW_INPUT_FILE_NAME;
 
 		}
 
@@ -190,10 +183,12 @@ public class CobwebApplicationRunner {
 				defaultconf = serializer.loadConfig(inputFileName);
 			}
 			catch (IOException e) {
+
 				throw new RuntimeException("Could not write default configuration file", e);
 			}
 		} catch (Exception e) {
-			String message = "Cannot load " + inputFileName + "";
+
+			String message = "Cannot load " + inputFileName + " because of " + e.getCause();
 			if (visible) {
 				throw new UserInputException(message, e);
 			} else {

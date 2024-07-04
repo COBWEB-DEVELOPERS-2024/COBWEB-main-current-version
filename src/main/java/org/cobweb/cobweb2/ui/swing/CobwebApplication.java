@@ -77,7 +77,7 @@ public class CobwebApplication extends JFrame {
 
 	private static final String TEMPORARY_FILE_EXTENSION = ".cwtemp";
 
-	static final String INITIAL_OR_NEW_INPUT_FILE_NAME = "initial_or_new_input_(reserved)" + CONFIG_FILE_EXTENSION;
+	static final String INITIAL_OR_NEW_INPUT_FILE_NAME = "initialfile.xml";
 
 	public static final String DEFAULT_DATA_FILE_NAME = "default_data_(reserved)";
 
