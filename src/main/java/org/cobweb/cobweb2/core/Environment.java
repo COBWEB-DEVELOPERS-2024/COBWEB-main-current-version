@@ -1,5 +1,4 @@
 package org.cobweb.cobweb2.core;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;

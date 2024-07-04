@@ -1,6 +1,5 @@
 package org.cobweb.cobweb2.plugins.gravity;
 
-import javafx.util.Pair;
 import org.cobweb.cobweb2.Simulation;
 import org.cobweb.cobweb2.core.*;
 import org.cobweb.cobweb2.impl.ComplexAgent;
@@ -8,7 +7,7 @@ import org.cobweb.cobweb2.impl.ComplexEnvironment;
 import org.cobweb.cobweb2.plugins.AgentState;
 import org.cobweb.cobweb2.plugins.EnvironmentMutator;
 import org.cobweb.cobweb2.plugins.MoveMutator;
-
+import org.cobweb.Pair;
 import java.util.ArrayList;
 
 public class GravityMutator implements MoveMutator, EnvironmentMutator {
