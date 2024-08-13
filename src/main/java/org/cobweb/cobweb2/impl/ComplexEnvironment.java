@@ -129,7 +129,9 @@ public class ComplexEnvironment extends Environment {
 				ComplexAgent agent = (ComplexAgent) getAgent(currentPos);
 				if (agent != null) {
 					int theType = agent.getType();
+					if(thetype < agentData.size()){
 					agent.setParams(agentData[theType]);
+					}
 				}
 			}
 		}
