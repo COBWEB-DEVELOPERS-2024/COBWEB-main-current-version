@@ -112,7 +112,6 @@ public class ParameterSerializer {
 	public void save(ParameterSerializable obj, Element config, Document doc) {
 		Class<?> T = obj.getClass();
 
-
 		for (Method m : T.getMethods()) {
 			ConfXMLTag tagname = m.getAnnotation(ConfXMLTag.class);
 			if (tagname == null)
@@ -121,7 +120,7 @@ public class ParameterSerializer {
 			try {
 				Method getter = T.getMethod(m.getName().replaceFirst("^set", "get"));
 				Object value = getter.invoke(obj);
-				Element tag = doc.createElement(tagname.value());
+				Element tag = doc.createElement(sanitize(tagname.value()));
 				saveObject(value.getClass(), m, value, tag, doc);
 				config.appendChild(tag);
 
@@ -141,7 +140,7 @@ public class ParameterSerializer {
 			if (squish) // store config in current node, don't create a child
 				tag = config;
 			else if (tagname != null) // store config in child node
-				tag = doc.createElement(tagname.value());
+				tag = doc.createElement(sanitize(tagname.value()));
 			else // not a field we care about
 				continue;
 
@@ -159,6 +158,12 @@ public class ParameterSerializer {
 		}
 	}
 
+	/** Returns a string containing the name of an XML element with invalid characters replaced with "_"
+	 * @param elementName name of the XML element
+	 * @return string containing a sanitized version of the XML element's name */
+	private String sanitize(String elementName) {
+		return elementName.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+	}
 
 	private Object loadObject(Class<?> type, AnnotatedElement annotationSource, Object currentValue, Node objectNode) throws IllegalArgumentException, IllegalAccessException {
 		Object newValue = currentValue;
