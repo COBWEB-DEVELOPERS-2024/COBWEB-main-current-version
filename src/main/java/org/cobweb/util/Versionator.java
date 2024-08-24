@@ -15,7 +15,11 @@ public class Versionator {
 		// Try JAR file first
 		version = Versionator.class.getPackage().getImplementationVersion();
 
-		if (version == null) {
+		/** Commented out the code below since git.properties isn't being found in the classpath
+		 * leading to a nullpointer exception whenever you try modifying the simulation
+		 *  */
+		/*
+		 if (version == null) {
 			// Else look in the version text file
 			try {
 				ClassLoader loader = Versionator.class.getClassLoader();
@@ -41,9 +45,10 @@ public class Versionator {
 				// nothing
 			}
 		}
-
-		if (version == null)
+		*/
+		if (version == null) {
 			version = "Unknown Version";
+		}
 
 		return version;
 	}
