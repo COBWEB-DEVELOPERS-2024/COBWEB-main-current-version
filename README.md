@@ -5,10 +5,23 @@ COBWEB (Complexity & Organized Behaviour Within Environmental Bounds) is a compu
 * Java is required, you can get it here: https://java.com/download/
 * Get the latest COBWEB jar file: https://github.com/COBWEB-ca/cobweb2/releases
 
-### Setting up the development environment
+### Setting up the development environment for Eclipse
 * Install Eclipse IDE for Java Developers: http://eclipse.org/downloads/
 * Install EGit: http://www.vogella.com/tutorials/EclipseGit/article.html#eclipseinstallation
 * Configure EGit: http://www.vogella.com/tutorials/EclipseGit/article.html#egitconfiguration (just steps 5.1 and 5.2 should be enough)
-* Clone COBWEB from github: http://www.vogella.com/tutorials/EclipseGit/article.html#clone_repositoy the repository URI is: https://github.com/COBWEB-ca/cobweb2 and the branch is "master"
+* Clone COBWEB from GitHub: http://www.vogella.com/tutorials/EclipseGit/article.html#clone_repositoy
+  * The repository URL is: https://github.com/COBWEB-DEVELOPERS-2024/COBWEB-main-current-version and the branch is "master"
 * Wait for Eclipse to fetch the dependencies using Maven and build the project
 * Modify and run the code!
+
+### Setting up the development environment for Intellij IDEA Ultimate Edition
+* Install Intellij IDEA Ultimate Edition: https://www.jetbrains.com/idea/download/?section=windows
+* Open the IDE
+* Go to File -> New -> Project From Version Control
+* Select "Git" as the version control
+* Paste the following URL for the Git repository: https://github.com/COBWEB-DEVELOPERS-2024/COBWEB-main-current-version.git
+* Wait for Intellij IDEA to fetch the dependencies and build the project
+* Modify and run the code!
+
+### Note for developers
+* COBWEB will only compile if you go to the "CobwebApplicationRunner.java" file in your IDE, which is located in src/main/java/org/cobweb/cobweb2/ui/swing
