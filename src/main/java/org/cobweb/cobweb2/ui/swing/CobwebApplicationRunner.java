@@ -65,7 +65,7 @@ public class CobwebApplicationRunner {
 
 	public static void main(String[] args) {
 
-		// Process Arguments`
+		// Process Arguments
 
 		String inputFileName = "";
 		String logFileName = "";
