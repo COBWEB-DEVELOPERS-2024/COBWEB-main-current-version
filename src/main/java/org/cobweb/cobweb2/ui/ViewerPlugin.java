@@ -1,8 +1,5 @@
 package org.cobweb.cobweb2.ui;
 
-
-
-
 public interface ViewerPlugin {
 
 	public String getName();
