@@ -62,31 +62,31 @@ public class LinearAIGraph extends Stage {
 		setScene(scene); // Place the scene onto the stage
 
 		// Initialize the refresh timer using KeyFrame to trigger the refreshData() method every 100 ms
-		refreshTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> refreshData()));
+		refreshTimer = new Timeline(new KeyFrame(Duration.millis(100), e -> refreshData()));
 
 		// Set the cycle count to ensure data will be refreshed every 100 ms
 		refreshTimer.setCycleCount(Timeline.INDEFINITE); // Cycle count is indefinite until the window is closed
 
 		// Refresh data when the window is shown
-		setOnShown(event -> {
+		setOnShown(e -> { // event = e
 			refreshTimer.play();
 		});
 
 		// TODO: Test this and compare hardware resource consumption
-		// setOnShowing(event -> refreshTimer.play());
+		// setOnShowing(e -> refreshTimer.play());
 
 		// Stop the refresh timer when the window is closed or minimized
-		setOnHidden(event -> {
+		setOnHidden(e -> { // event = e
 			refreshTimer.stop();
 		});
 
 		// TODO: Test these and compare hardware resource consumption
-		// setOnHiding(event -> refreshTimer.pause());
-		// setOnHiding(event -> refreshTimer.stop());
-		// setOnHidden(event -> refreshTimer.pause());
+		// setOnHiding(e -> refreshTimer.pause());
+		// setOnHiding(e -> refreshTimer.stop());
+		// setOnHidden(e -> refreshTimer.pause());
 
 		// Display the window
-		show(); // 'Stage' method to display that stage
+		show(); // 'Stage' method to display the window/stage
 	}
 
 	/** Refreshes data being displayed on the chart */
