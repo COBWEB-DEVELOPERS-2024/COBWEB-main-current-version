@@ -38,7 +38,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.geometry.Insets;
 
-/** New utility methods for creating form- or grid-style layouts with JavaFX's GridPane. */
+/** New utility methods for creating form- or grid-style layouts with JavaFX's GridPane.
+ *
+ * NOTE: When -1 is passed as an argument to a method defined in JavaFX, that just means
+ * that JavaFX will need to perform the calculations necessary to perform a given task. It'll query
+ * the natural size of a given object (i.e., a node), thereby foregoing any manual calculation
+ * tasks needed for that object by the developer.
+ *
+ * */
 public class GridPaneUtilities {
 	/**
 	 * Aligns and arranges nodes within a compact grid format via a GridPane.
