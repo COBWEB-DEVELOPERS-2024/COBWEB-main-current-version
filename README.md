@@ -13,22 +13,25 @@ COBWEB (Complexity & Organized Behaviour Within Environmental Bounds) is a compu
 * Clone COBWEB from GitHub: http://www.vogella.com/tutorials/EclipseGit/article.html#clone_repositoy
   * The repository URL is: https://github.com/COBWEB-DEVELOPERS-2024/COBWEB-main-current-version and the branch is "dev-javafx"
 * Wait for Eclipse to fetch the dependencies using Maven and build the project
-* Modify and run the code!
+* Modify the code after that's done
 
 ### Setting up the development environment for Intellij IDEA Ultimate Edition
 * Install Intellij IDEA Ultimate Edition: https://www.jetbrains.com/idea/download/?section=windows
 * Open the IDE
 * Go to File -> New -> Project From Version Control
 * Select "Git" as the version control
-* Paste the following URL for the Git repository: https://github.com/COBWEB-DEVELOPERS-2024/COBWEB-main-current-version/tree/dev-javafx.git
+* Paste the following URL for the Git repository: https://github.com/COBWEB-DEVELOPERS-2024/COBWEB-main-current-version.git
 * Wait for Intellij IDEA to fetch the dependencies and build the project
-* Modify and run the code!
+* Go to the branch (where it says "master"), select dev-javafx -> Checkout
+* If Intellij asks you to perform a smart checkout, do that.
+* Wait for your IntelliJ to update your project files with the dev-javafx files. 
+* Modify the code after that's done
 
 ### Note for developers
 * COBWEB will only compile if you go to the "CobwebApplicationRunner.java" file in your IDE, which is located in src/main/java/org/cobweb/cobweb2/ui/swing
 
 ### Note: This is WIP/experimental build of COBWEB using JFX-22 and JDK-22. 
-### It will NOT compile; some of the custom-made libraries for Swing need to be updated to work for JavaFX.
+### It will NOT compile; some of the custom-made libraries created for Swing need to be updated to work for JavaFX.
 
 ### Install JavaFX (IntelliJ IDEA Ultimate Edition)
 * Download openJDK-22 in IntelliJ
