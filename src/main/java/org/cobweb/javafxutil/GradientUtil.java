@@ -24,7 +24,7 @@ public class GradientUtil {
 	}
 
 	public static Color colorFromFloat(float y, float alpha) {
-		// Return HSB -> RGB
+		// Return HSB -> RGBA
 		return Color.hsb((1 - y) * 240, 1.0, 1.0, alpha); // via JavaFX's built-in HSB method
 	}
 
