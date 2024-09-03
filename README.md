@@ -41,4 +41,11 @@ COBWEB (Complexity & Organized Behaviour Within Environmental Bounds) is a compu
 * Navigate over to the 'Modules,' which is under the Project Settings section on the left
 * Once opened, go to 'Dependencies,' and ensure that 'lib' was added. If it's not present, add it in manually like before.
 * The libraries should be loaded. 
-  * If not, try right clicking the project and reloading the files from disk, or restart the IDE.
+  * If not, try right-clicking the project and reloading the files from disk, or restart the IDE.
+
+### ** TODO **
+* Migrate everything in org.cobweb.cobweb2.ui.swing, replacing Swing and/or AWT libraries method calls with the ones defined in JavaFX's libraries.
+* Change CobwebApplicationRunner.java to be the JavaFX equivalent of a main() method/entry point for compiling.
+* Refactor org.cobweb.cobweb2.ui.swing to org.cobweb.cobweb2.ui.javafx after migrating everything class/method in the package.
+* Change the compilers' settings for IntelliJ to use openjdk-22 by default when compiling the program, and ensure that it compiles correctly after the migration is complete.
+  * Hasn't been configured yet since the current state of the program cannot be compiled at this point.
