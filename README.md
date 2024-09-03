@@ -1,6 +1,7 @@
 # COBWEB 2
 COBWEB (Complexity & Organized Behaviour Within Environmental Bounds) is a computer simulation model which can be used for research in a variety of fields such as ecology, health, psychology, economic geography, climate change impacts and ethics.
 
+
 ### Running COBWEB
 * Java is required, you can get it here: https://java.com/download/
 * Get the latest COBWEB jar file: https://github.com/COBWEB-ca/cobweb2/releases
@@ -25,3 +26,19 @@ COBWEB (Complexity & Organized Behaviour Within Environmental Bounds) is a compu
 
 ### Note for developers
 * COBWEB will only compile if you go to the "CobwebApplicationRunner.java" file in your IDE, which is located in src/main/java/org/cobweb/cobweb2/ui/swing
+
+### Note: This is WIP/experimental build of COBWEB using JFX-22 and JDK-22. 
+### It will NOT compile; some of the custom-made libraries for Swing need to be updated to work for JavaFX.
+
+### Install JavaFX (IntelliJ IDEA Ultimate Edition)
+* Download openJDK-22 in IntelliJ
+* Download JavaFX 22: https://gluonhq.com/products/javafx/
+* Extract the library to C:\Program Files\Java
+* Open the project in Intellij IDEA
+* Go to File -> Project Structure -> Libraries
+* Press the '+' button, and add the JavaFX library
+  * It should be called 'lib,' which is located under C:\Program Files\Java\javafx-sdk-22.0.2
+* Navigate over to the 'Modules,' which is under the Project Settings section on the left
+* Once opened, go to 'Dependencies,' and ensure that 'lib' was added. If it's not present, add it in manually like before.
+* The libraries should be loaded. 
+  * If not, try right clicking the project and reloading the files from disk, or restart the IDE.
