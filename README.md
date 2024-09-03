@@ -37,7 +37,7 @@ COBWEB (Complexity & Organized Behaviour Within Environmental Bounds) is a compu
 * Open the project in Intellij IDEA
 * Go to File -> Project Structure -> Libraries
 * Press the '+' button, and add the JavaFX library
-  * It should be called 'lib,' which is located under C:\Program Files\Java\javafx-sdk-22.0.2
+  * The library folder should be called 'lib,' which is located under C:\Program Files\Java\javafx-sdk-22.0.2
 * Navigate over to the 'Modules,' which is under the Project Settings section on the left
 * Once opened, go to 'Dependencies,' and ensure that 'lib' was added. If it's not present, add it in manually like before.
 * The libraries should be loaded. 
