@@ -1,4 +1,4 @@
 /**
  * Helpers for Java Swing UI
  */
-package org.cobweb.swingutil;
+package org.cobweb.javafxutil;
