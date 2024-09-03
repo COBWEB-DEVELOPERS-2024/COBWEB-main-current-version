@@ -1,4 +1,4 @@
-package org.cobweb.swingutil;
+package org.cobweb.javafxutil;
 
 /**
  * A display that can be refreshed synchronously

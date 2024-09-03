@@ -1,4 +1,4 @@
-package org.cobweb.swingutil.binding;
+package org.cobweb.javafxutil.binding;
 
 public interface FieldBoundComponent {
 
