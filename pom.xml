@@ -272,6 +272,13 @@
 			<artifactId>swingx</artifactId>
 			<version>1.6</version>
 		</dependency>
+		<!-- JavaFX modules -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>22.0.2</version>
+		</dependency>
+		<!-- Add other JavaFX modules as needed -->
 	</dependencies>
 
 </project>
