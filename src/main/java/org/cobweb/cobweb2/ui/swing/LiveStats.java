@@ -11,7 +11,7 @@ import org.cobweb.cobweb2.ui.StatsTracker;
 import org.cobweb.cobweb2.ui.UpdatableUI;
 import org.cobweb.cobweb2.ui.ViewerClosedCallback;
 import org.cobweb.cobweb2.ui.ViewerPlugin;
-import org.cobweb.swingutil.JComponentWaiter;
+import org.cobweb.javafxutil.JComponentWaiter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

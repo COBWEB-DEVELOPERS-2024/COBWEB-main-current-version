@@ -4,7 +4,7 @@ import org.cobweb.cobweb2.plugins.swarm.PairwiseEffect;
 import org.cobweb.cobweb2.plugins.swarm.SwarmAgentParams;
 import org.cobweb.cobweb2.plugins.swarm.SwarmParams;
 import org.cobweb.io.ChoiceCatalog;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 
 public class SwarmConfigPage extends TableConfigPage<SwarmAgentParams> {

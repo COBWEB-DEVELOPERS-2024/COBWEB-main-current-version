@@ -28,7 +28,7 @@ import org.cobweb.cobweb2.impl.ai.BehaviorArray;
 import org.cobweb.cobweb2.impl.ai.GeneticController;
 import org.cobweb.cobweb2.impl.ai.GeneticControllerParams;
 import org.cobweb.cobweb2.impl.ai.GeneticStateAgentParams;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 final class GeneticAIPanel extends SettingsPanel {
 

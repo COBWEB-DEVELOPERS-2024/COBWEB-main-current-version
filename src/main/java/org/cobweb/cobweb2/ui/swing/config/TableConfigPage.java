@@ -9,7 +9,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.cobweb.io.ChoiceCatalog;
 import org.cobweb.io.ParameterSerializable;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 
 public class TableConfigPage<T extends ParameterSerializable> implements ConfigPage {

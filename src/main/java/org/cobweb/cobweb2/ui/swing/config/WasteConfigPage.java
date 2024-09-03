@@ -1,7 +1,7 @@
 package org.cobweb.cobweb2.ui.swing.config;
 
 import org.cobweb.cobweb2.plugins.waste.WasteAgentParams;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 
 public class WasteConfigPage extends TableConfigPage<WasteAgentParams> {

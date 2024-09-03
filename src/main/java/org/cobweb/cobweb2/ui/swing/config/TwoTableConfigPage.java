@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import org.cobweb.cobweb2.plugins.PerTypeParam;
 import org.cobweb.io.ChoiceCatalog;
 import org.cobweb.io.ParameterSerializable;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 /**
  * Config page for PerAgentParams<TperType> parameters that also have global properties

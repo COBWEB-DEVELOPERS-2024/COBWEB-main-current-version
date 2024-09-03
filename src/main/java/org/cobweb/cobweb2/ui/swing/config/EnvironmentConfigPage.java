@@ -19,9 +19,9 @@ import org.cobweb.cobweb2.impl.ComplexEnvironmentParams;
 import org.cobweb.cobweb2.ui.config.FieldPropertyAccessor;
 import org.cobweb.cobweb2.ui.config.SetterPropertyAccessor;
 import org.cobweb.cobweb2.ui.swing.ConfigRefresher;
-import org.cobweb.swingutil.SpringUtilities;
-import org.cobweb.swingutil.binding.BoundCheckBox;
-import org.cobweb.swingutil.binding.BoundJFormattedTextField;
+import org.cobweb.javafxutil.SpringUtilities;
+import org.cobweb.javafxutil.binding.BoundCheckBox;
+import org.cobweb.javafxutil.binding.BoundFormattedTextField;
 /**
  * @author Igor
  *
@@ -56,13 +56,13 @@ public class EnvironmentConfigPage implements ConfigPage {
 		Util.makeGroupPanel(panel11, "Environment Settings");
 		JPanel fieldPane = new JPanel();
 
-		BoundJFormattedTextField Width = new BoundJFormattedTextField(params.envParams,
+		BoundFormattedTextField Width = new BoundFormattedTextField(params.envParams,
 				new FieldPropertyAccessor(ComplexEnvironmentParams.class.getField("width")),
 				NumberFormat.getIntegerInstance());
 		fieldPane.add(new JLabel(Width.getLabelText()));
 		fieldPane.add(Width);
 
-		BoundJFormattedTextField Height = new BoundJFormattedTextField(params.envParams,
+		BoundFormattedTextField Height = new BoundFormattedTextField(params.envParams,
 				new FieldPropertyAccessor(ComplexEnvironmentParams.class.getField("height")),
 				NumberFormat.getIntegerInstance());
 		fieldPane.add(new JLabel(Height.getLabelText()));
@@ -74,7 +74,7 @@ public class EnvironmentConfigPage implements ConfigPage {
 		fieldPane.add(wrap);
 
 
-		BoundJFormattedTextField AgentNum = new BoundJFormattedTextField(params,
+		BoundFormattedTextField AgentNum = new BoundFormattedTextField(params,
 				new SetterPropertyAccessor(SimulationConfig.class.getMethod("setAgentTypes", int.class)),
 				NumberFormat.getIntegerInstance());
 		AgentNum.addPropertyChangeListener("value", new PropertyChangeListener() {
@@ -146,13 +146,13 @@ public class EnvironmentConfigPage implements ConfigPage {
 		Util.makeGroupPanel(panel14, "Random Variables");
 		fieldPane = new JPanel(new GridLayout(3, 1));
 
-		BoundJFormattedTextField initialStones = new BoundJFormattedTextField(params.envParams,
+		BoundFormattedTextField initialStones = new BoundFormattedTextField(params.envParams,
 				new FieldPropertyAccessor(ComplexEnvironmentParams.class.getField("initialStones")),
 				NumberFormat.getIntegerInstance());
 		fieldPane.add(new JLabel(initialStones.getLabelText()));
 		fieldPane.add(initialStones);
 
-		BoundJFormattedTextField randomSeed = new BoundJFormattedTextField(params, new FieldPropertyAccessor(SimulationConfig.class.getField("randomSeed")), NumberFormat.getIntegerInstance());
+		BoundFormattedTextField randomSeed = new BoundFormattedTextField(params, new FieldPropertyAccessor(SimulationConfig.class.getField("randomSeed")), NumberFormat.getIntegerInstance());
 		JButton makeRandom = new JButton("Generate");
 		makeRandom.addActionListener(new SeedRandomListener(randomSeed));
 		fieldPane.add(new JLabel(randomSeed.getLabelText()));

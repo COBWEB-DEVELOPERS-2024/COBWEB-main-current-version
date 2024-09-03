@@ -1,7 +1,7 @@
 package org.cobweb.cobweb2.ui.swing.config;
 
 import org.cobweb.cobweb2.impl.FoodwebParams;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 
 public class FoodwebConfigPage extends TableConfigPage<FoodwebParams> {

@@ -27,8 +27,8 @@ import org.cobweb.cobweb2.plugins.genetics.MeiosisMode;
 import org.cobweb.cobweb2.ui.UserInputException;
 import org.cobweb.cobweb2.ui.config.FieldPropertyAccessor;
 import org.cobweb.io.ChoiceCatalog;
-import org.cobweb.swingutil.ColorLookup;
-import org.cobweb.swingutil.binding.EnumComboBoxModel;
+import org.cobweb.javafxutil.ColorLookup;
+import org.cobweb.javafxutil.binding.EnumComboBox;
 import org.cobweb.util.ArrayUtilities;
 
 public class GeneticConfigPage implements ConfigPage {
@@ -211,7 +211,7 @@ public class GeneticConfigPage implements ConfigPage {
 
 	private JPanel makeMeiosisConfig() throws NoSuchFieldException {
 		JComboBox<MeiosisMode> meiosis_mode = new JComboBox<MeiosisMode>(
-				new EnumComboBoxModel<MeiosisMode>(this.params,
+				new EnumComboBox<MeiosisMode>(this.params,
 						new FieldPropertyAccessor(GeneticParams.class.getField("meiosisMode"))));
 		JPanel meiosis_mode_panel = new JPanel(new BorderLayout());
 		meiosis_mode_panel.add(new JLabel("Mode of Meiosis"), BorderLayout.NORTH);

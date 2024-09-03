@@ -2,7 +2,7 @@ package org.cobweb.cobweb2.ui.swing.config;
 
 import org.cobweb.cobweb2.plugins.food.ComplexFoodParams;
 import org.cobweb.cobweb2.plugins.food.FoodGrowthParams;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 
 public class ResourceConfigPage extends TwoTableConfigPage<FoodGrowthParams, ComplexFoodParams>{

@@ -20,7 +20,7 @@ import org.cobweb.cobweb2.core.Location;
 import org.cobweb.cobweb2.impl.ComplexAgent;
 import org.cobweb.cobweb2.plugins.abiotic.AbioticMutator;
 import org.cobweb.cobweb2.ui.swing.config.DisplaySettings;
-import org.cobweb.swingutil.WaitableJComponent;
+import org.cobweb.javafxutil.WaitableJComponent;
 
 /**
  * DisplayPanel is a Panel derivative useful for displaying a cobweb simulation. It uses an offscreen image to buffer

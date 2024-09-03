@@ -27,7 +27,7 @@ import javax.swing.table.DefaultTableModel;
 import org.cobweb.cobweb2.SimulationConfig;
 import org.cobweb.cobweb2.impl.ai.LinearWeightsController;
 import org.cobweb.cobweb2.impl.ai.LinearWeightsControllerParams;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 /**
  * @author Igor

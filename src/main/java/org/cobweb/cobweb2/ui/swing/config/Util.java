@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.LookAndFeel;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 
 public class Util {

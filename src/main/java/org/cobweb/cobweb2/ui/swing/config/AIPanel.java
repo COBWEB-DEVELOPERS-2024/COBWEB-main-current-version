@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import org.cobweb.cobweb2.SimulationConfig;
 import org.cobweb.cobweb2.impl.ai.GeneticController;
 import org.cobweb.cobweb2.impl.ai.LinearWeightsController;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 public class AIPanel extends SettingsPanel {
 

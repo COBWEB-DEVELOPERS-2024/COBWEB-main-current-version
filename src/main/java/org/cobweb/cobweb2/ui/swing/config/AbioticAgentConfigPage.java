@@ -2,7 +2,7 @@ package org.cobweb.cobweb2.ui.swing.config;
 
 import org.cobweb.cobweb2.plugins.abiotic.AbioticAgentParams;
 import org.cobweb.io.ChoiceCatalog;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 public class AbioticAgentConfigPage extends TableConfigPage<AbioticAgentParams> {
 

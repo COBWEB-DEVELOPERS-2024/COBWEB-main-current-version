@@ -11,7 +11,7 @@ import org.cobweb.cobweb2.plugins.genetics.GeneticCode;
 import org.cobweb.cobweb2.plugins.pd.PDState;
 import org.cobweb.cobweb2.plugins.personalities.PersonalityState;
 import org.cobweb.cobweb2.plugins.toxin.ToxinState;
-import org.cobweb.swingutil.ColorLookup;
+import org.cobweb.javafxutil.ColorLookup;
 
 /**
  * AgentDrawInfo stores the drawable state of a single agent. AgentDrawInfo

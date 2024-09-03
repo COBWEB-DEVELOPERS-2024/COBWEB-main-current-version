@@ -13,7 +13,7 @@ import org.cobweb.cobweb2.ui.swing.DisplayOverlay;
 import org.cobweb.cobweb2.ui.swing.OverlayUtils;
 import org.cobweb.cobweb2.ui.swing.config.DisplaySettings;
 import org.cobweb.cobweb2.ui.swing.energy.EnergyEventViewer.EnergyStatsConfig;
-import org.cobweb.swingutil.GradientUtil;
+import org.cobweb.javafxutil.GradientUtil;
 import org.cobweb.util.MathUtil;
 
 public class EnergyDrawInfo implements DisplayOverlay {
