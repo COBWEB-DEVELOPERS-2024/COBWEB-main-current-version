@@ -25,7 +25,7 @@ public class LinearAIViewer implements ViewerPlugin {
 		aiGraph = new LinearAIGraph(controllerParams);
 
 		// Event handler for the window close request
-		aiGraph.setOnCloseRequest(event -> {
+		aiGraph.setOnCloseRequest(e -> {
 			onClosed.viewerClosed(); // Viewer has been closed
 		});
 
