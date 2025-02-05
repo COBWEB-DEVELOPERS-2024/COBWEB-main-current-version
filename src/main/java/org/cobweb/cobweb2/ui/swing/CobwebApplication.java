@@ -49,6 +49,7 @@ import org.cobweb.cobweb2.ui.ViewerClosedCallback;
 import org.cobweb.cobweb2.ui.ViewerPlugin;
 import org.cobweb.cobweb2.ui.swing.ai.LinearAIViewer;
 import org.cobweb.cobweb2.ui.swing.config.DisplaySettings;
+import org.cobweb.cobweb2.ui.swing.discretizedgravity.DiscretizedGravityViewer;
 import org.cobweb.cobweb2.ui.swing.energy.EnergyEventViewer;
 import org.cobweb.cobweb2.ui.swing.genetics.GAChartOutput;
 import org.cobweb.cobweb2.ui.swing.production.ProductionViewer;
@@ -548,6 +549,7 @@ public class CobwebApplication extends JFrame {
 			viewers.add(new ProductionViewer(simulatorUI.displayPanel));
 			viewers.add(new EnergyEventViewer(simulatorUI.displayPanel, simRunner.getSimulation()));
 			viewers.add(new RegionViewer(simulatorUI.displayPanel, simRunner));
+			viewers.add(new DiscretizedGravityViewer(simulatorUI.displayPanel, simRunner.getSimulation()));
 		}
 	}
 
