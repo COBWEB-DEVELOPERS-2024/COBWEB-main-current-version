@@ -58,6 +58,10 @@ public abstract class Agent implements Updatable {
 		return position;
 	}
 
+	public ExtendedLocationDirection getExtendedPosition() {
+		return new ExtendedLocationDirection(this.position, Topology.NONE);
+	}
+
 	public boolean isAlive() {
 		return alive;
 	}

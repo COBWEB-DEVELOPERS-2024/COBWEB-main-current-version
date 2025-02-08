@@ -549,7 +549,7 @@ public class CobwebApplication extends JFrame {
 			viewers.add(new ProductionViewer(simulatorUI.displayPanel));
 			viewers.add(new EnergyEventViewer(simulatorUI.displayPanel, simRunner.getSimulation()));
 			viewers.add(new RegionViewer(simulatorUI.displayPanel, simRunner));
-			viewers.add(new DiscretizedGravityViewer(simulatorUI.displayPanel, simRunner.getSimulation()));
+			viewers.add(new DiscretizedGravityViewer(simulatorUI.displayPanel, simRunner.getSimulation(), simRunner.getSimulation().theEnvironment));
 		}
 	}
 

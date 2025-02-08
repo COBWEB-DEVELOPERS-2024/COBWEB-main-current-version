@@ -5,28 +5,29 @@ import org.cobweb.cobweb2.ui.swing.DisplayOverlay;
 import org.cobweb.cobweb2.ui.swing.DisplayPanel;
 import org.cobweb.cobweb2.ui.swing.OverlayGenerator;
 import org.cobweb.cobweb2.ui.swing.OverlayPluginViewer;
+import org.cobweb.cobweb2.impl.ComplexEnvironment;
+import org.cobweb.cobweb2.core.Location;
 
-import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DiscretizedGravityViewer extends OverlayPluginViewer<DiscretizedGravityViewer> implements OverlayGenerator {
     private Simulation simulation;
+    private ComplexEnvironment environment;
     private DiscretizedGravitySplit split;
+    private Timer resizeTimer;
 
-    public DiscretizedGravityViewer(DisplayPanel panel, Simulation simulation) {
+    public DiscretizedGravityViewer(DisplayPanel panel, Simulation simulation, ComplexEnvironment environment) {
         super(panel);
-        this.simulation = simulation;       // used for processing stuff (Anish stuff)
-
-        // default split stuff
+        this.simulation = simulation;
+        this.environment = environment;
         this.split = new DiscretizedGravitySplit();
-        this.split.split();
-        this.split.getUpLeft().split();
-        this.split.getDownRight().split();
-        this.split.getDownRight().getDownLeft().split();
+        startResizing();
     }
 
     @Override
     public DisplayOverlay getDrawInfo(Simulation sim) {
-        return new DiscretizedGravityOverlay(this.split);
+        return new DiscretizedGravityOverlay(this.split, environment);
     }
 
     @Override
@@ -37,5 +38,25 @@ public class DiscretizedGravityViewer extends OverlayPluginViewer<DiscretizedGra
     @Override
     public String getName() {
         return "Discretized Gravity";
+    }
+
+    private void updateEnergyData() {
+        for (Location loc : environment.getAllGridLocations()) {
+            int energy = environment.getAggregatedEnergy(loc);
+            split.setCellSize(loc, energy / 10);
+        }
+    }
+
+    /**
+     * Periodically resizes the grid every 500ms.
+     */
+    private void startResizing() {
+        resizeTimer = new Timer(true);
+        resizeTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateEnergyData();
+            }
+        }, 0, 500);
     }
 }

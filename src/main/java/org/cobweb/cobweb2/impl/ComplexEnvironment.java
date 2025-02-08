@@ -1,7 +1,6 @@
 package org.cobweb.cobweb2.impl;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.cobweb.cobweb2.core.Agent;
 import org.cobweb.cobweb2.core.Drop;
@@ -12,7 +11,7 @@ import org.cobweb.cobweb2.core.SimulationInternals;
 import org.cobweb.cobweb2.plugins.EnvironmentMutator;
 
 /**
- * 2D grid where agents and food live
+ * 2D grid where agents and food live.
  */
 public class ComplexEnvironment extends Environment {
 
@@ -22,16 +21,106 @@ public class ComplexEnvironment extends Environment {
 
 	private Map<Class<? extends EnvironmentMutator>, EnvironmentMutator> plugins = new LinkedHashMap<>();
 
+	// Store aggregated energy per grid cell
+	private Map<Location, Integer> cellEnergyMap = new HashMap<>();
+	private Map<Location, Integer> cellSizeMap = new HashMap<>();
+
 	public ComplexEnvironment(SimulationInternals simulation) {
 		super(simulation);
 	}
 
+	/**
+	 * Retrieves all grid locations.
+	 */
+	public Collection<Location> getAllGridLocations() {
+		List<Location> locations = new ArrayList<>();
+		for (int x = 0; x < topology.width; x++) {
+			for (int y = 0; y < topology.height; y++) {
+				locations.add(new Location(x, y));
+			}
+		}
+		return locations;
+	}
+
+	/**
+	 * Aggregates energy per grid cell before resizing.
+	 */
+	public void computeAggregatedEnergy() {
+		cellEnergyMap.clear();
+
+		for (Agent agent : this.getAllAgents()) {
+			if (agent == null) continue;
+			Location loc = agent.getPosition();
+
+			if (!isValidLocation(loc)) continue;
+
+			int energy = agent.getEnergy();
+			cellEnergyMap.put(loc, cellEnergyMap.getOrDefault(loc, 0) + energy);
+		}
+	}
+
+
+	public int getAggregatedEnergy(Location loc) {
+		return cellEnergyMap.getOrDefault(loc, 0);
+	}
+
+	public Collection<Agent> getAllAgents() {
+		return agentTable.values();
+	}
+
+	/**
+	 * Resizes grid dynamically based on energy levels.
+	 */
+	public void resizeGridBasedOnEnergy() {
+		computeAggregatedEnergy(); // Ensure energy is updated before resizing
+
+		for (Location loc : cellEnergyMap.keySet()) {
+			if (!isValidLocation(loc)) continue;
+			int energy = cellEnergyMap.get(loc);
+			adjustCellSize(loc, energy);
+		}
+	}
+
+	// ✅ Ensure location is inside the valid grid area
+	private boolean isValidLocation(Location loc) {
+		if (!data.wrapMap) {
+			return loc.x >= 0 && loc.y >= 0 && loc.x < data.width && loc.y < data.height;
+		}
+		return true;
+	}
+
+
+
+	/**
+	 * Adjusts the size of a cell based on energy.
+	 */
+
+	private void adjustCellSize(Location loc, int energy) {
+		int baseSize = 1;
+		int newSize = Math.max(baseSize, energy / 10);
+
+		if (loc.x < 0 || loc.y < 0 || loc.x >= data.width || loc.y >= data.height) {
+			System.out.println("Skipping out-of-bounds cell: " + loc);
+			return;
+		}
+		cellSizeMap.put(loc, newSize);
+
+		System.out.println("Cell at " + loc + " resized to: " + newSize);
+	}
+
+
+	/**
+	 * Retrieves the current size of a grid cell.
+	 */
+	public int getCellSize(Location loc) {
+		return cellSizeMap.getOrDefault(loc, 1);
+	}
+
+
 	public synchronized void addAgent(Location l, int type) {
 		if (!hasAgent(l) && !hasStone(l) && !hasDrop(l)) {
 			int agentType = type;
-
 			spawnAgent(new LocationDirection(l), agentType);
-
 		}
 	}
 
@@ -42,29 +131,16 @@ public class ComplexEnvironment extends Environment {
 		return child;
 	}
 
-	/**
-	 * Loads a new complex environment using the data held within the simulation
-	 * configuration object, p.  The following actions are performed during a load:
-	 *
-	 * <p>1. Attaches the scheduler, s, to the environment.
-	 * <br>2. Stores parameters from the file or stream in to ComplexEnvironment.
-	 * <br>3. Sets up location cache, and environment food and waste arrays.
-	 * <br>4. Keeps or removes old agents.
-	 * <br>5. Adds new stones, food, and agents.
-	 *
-	 */
 	public synchronized void setParams(ComplexEnvironmentParams envParams, AgentParams agentParams, boolean keepOldAgents, boolean keepOldArray, boolean keepOldDrops) throws IllegalArgumentException {
 		data = envParams;
 		agentData = agentParams.agentParams;
 
 		super.load(data.width, data.height, data.wrapMap, keepOldArray);
 
-		// Remove old components
 		if (keepOldAgents) {
 			killOffgridAgents();
 			loadOldAgents();
 		} else {
-			// do not call clearAgents(), it invokes mutators, etc
 			agentTable.clear();
 		}
 
@@ -74,7 +150,6 @@ public class ComplexEnvironment extends Environment {
 	}
 
 	public void loadNew() {
-		// add stones in to random locations
 		for (int i = 0; i < data.initialStones; ++i) {
 			Location l;
 			int tries = 0;
@@ -90,17 +165,9 @@ public class ComplexEnvironment extends Environment {
 		}
 	}
 
-	/**
-	 * Places agents in random locations.  If prisoner's dilemma is being used,
-	 * a number of cheaters that is dependent on the probability of being a cheater
-	 * are randomly assigned to agents.
-	 */
-	// FIXME: move out to simulation?
 	public void loadNewAgents() {
 		for (int i = 0; i < agentData.length; ++i) {
-
 			for (int j = 0; j < agentData[i].initialAgents; ++j) {
-
 				Location location;
 				int tries = 0;
 				do {
@@ -114,46 +181,23 @@ public class ComplexEnvironment extends Environment {
 		}
 	}
 
-	/**
-	 * Searches through each location to find every old agent.  Each agent that is found
-	 * is added to the scheduler if the scheduler is new.  Agents that are off the new
-	 * environment are removed from the environment.
-	 */
 	private void loadOldAgents() {
-		// Add in-bounds old agents to the new scheduler and update new
-		// constants
-		// TODO: a way to keep old parameters for old agents?
 		for (int x = 0; x < topology.width; ++x) {
 			for (int y = 0; y < topology.height; ++y) {
 				Location currentPos = new Location(x, y);
 				ComplexAgent agent = (ComplexAgent) getAgent(currentPos);
 				if (agent != null) {
 					int theType = agent.getType();
-
-					/* TODO: Test this
-					if(theType < agentTable.size()) {
-						agent.setParams(agentData[theType]);
-					}
-					*/
 					agent.setParams(agentData[theType]);
 				}
 			}
 		}
 	}
 
-	/**
-	 * tickNotification is the method called by the scheduler for each of its
-	 * clients for every tick of the simulation. For environment,
-	 * tickNotification performs all of the per-tick tasks necessary for the
-	 * environment to function properly. These tasks include managing food
-	 * depletion, food growth, and random food-"dropping".
-	 */
 	@Override
 	public synchronized void update() {
 		super.update();
-
-		updateDrops();
-
+		resizeGridBasedOnEnergy();
 		for (EnvironmentMutator v : plugins.values()) {
 			v.update();
 		}
@@ -169,9 +213,6 @@ public class ComplexEnvironment extends Environment {
 		return plugin;
 	}
 
-	/**
-	 *
-	 */
 	private void updateDrops() {
 		for (int x = 0; x < topology.width; x++) {
 			for (int y = 0; y < topology.height; y++) {

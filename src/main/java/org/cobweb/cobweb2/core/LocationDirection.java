@@ -14,5 +14,12 @@ public class LocationDirection extends Location {
 		direction = Topology.NONE;
 	}
 
-	private static final long serialVersionUID = 2L;
+	/**
+	 * Returns the location without the direction.
+	 */
+	public Location toLocation() {
+		return new Location(x, y);
+	}
+
+private static final long serialVersionUID = 2L;
 }

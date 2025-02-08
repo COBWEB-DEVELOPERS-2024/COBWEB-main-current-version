@@ -5,42 +5,36 @@ import org.cobweb.cobweb2.ui.swing.DisplayOverlay;
 import org.cobweb.cobweb2.ui.swing.config.DisplaySettings;
 
 import java.awt.*;
+import java.util.Collection;
+import org.cobweb.cobweb2.core.Location;
+import org.cobweb.cobweb2.impl.ComplexEnvironment;
 
 public class DiscretizedGravityOverlay implements DisplayOverlay {
     private DiscretizedGravitySplit split;
+    private ComplexEnvironment environment;
 
-    public DiscretizedGravityOverlay(DiscretizedGravitySplit split) {
+    public DiscretizedGravityOverlay(DiscretizedGravitySplit split, ComplexEnvironment environment) {
         this.split = split;
+        this.environment = environment;
     }
 
-    private void drawSplit(Graphics g, DiscretizedGravitySplit currSplit, int x, int y, int width, int height) {
-        // Base case
-        if (!currSplit.getIsSplit()) {
-            return;
+    private void drawSplit(Graphics g, Collection<Location> locations) {
+        for (Location loc : locations) {
+            int size = environment.getCellSize(loc) * 10; // Scale for visibility
+            g.drawRect(loc.x * size, loc.y * size, size, size);
         }
-
-        // Draw the split
-        int newWidth = width / 2;
-        int newHeight = height / 2;
-        g.drawLine(x + newWidth, y, x + newWidth, y + height);
-        g.drawLine(x, y + newHeight, x + width, y + newHeight);
-
-        // Recurse on the splits
-        drawSplit(g, currSplit.getUpLeft(), x, y, newWidth, newHeight);
-        drawSplit(g, currSplit.getUpRight(), x + newWidth, y, newWidth, newHeight);
-        drawSplit(g, currSplit.getDownLeft(), x, y + newHeight, newWidth, newHeight);
-        drawSplit(g, currSplit.getDownRight(), x + newWidth, y + newHeight, newWidth, newHeight);
     }
 
     @Override
     public void draw(Graphics g, int tileWidth, int tileHeight, Topology topology, DisplaySettings settings) {
-        // Draw the outer border
-        g.drawLine(0, 0, tileWidth * topology.width, 0);
-        g.drawLine(0, 0, 0, tileWidth * topology.height);
-        g.drawLine(tileWidth * topology.width, 0, tileWidth * topology.width, tileWidth * topology.height);
-        g.drawLine(0, tileWidth * topology.height, tileWidth * topology.width, tileWidth * topology.height);
+        g.setColor(Color.BLACK);
 
-        // recursively draw the splits
-        drawSplit(g, this.split, 0, 0, tileWidth * topology.width, tileHeight * topology.height);
+        // ✅ Prevent drawing outside the valid grid area
+        int gridWidth = environment.data.width * tileWidth;
+        int gridHeight = environment.data.height * tileHeight;
+        g.setClip(0, 0, gridWidth, gridHeight);  // Clip rendering to grid bounds
+
+        drawSplit(g, environment.getAllGridLocations());
     }
+
 }

@@ -25,7 +25,7 @@ public class ComplexAgentParams implements ResizableParam {
 	@ConfXMLTag("Agents")
 	public int initialAgents = 20;
 
-	/**
+	/**..
 	 * Energy gained from favourite food.
 	 */
 	@ConfDisplayName("Favourite food energy")
