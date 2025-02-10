@@ -107,7 +107,9 @@ public class ComplexEnvironment extends Environment {
 			if (!isCellValidForAgent(l)) {
 				toRemove.add(l);
 			} else {
-				mergedEnergies.put(l, mergedEnergies.getOrDefault(l, 0.0) + agentCells.get(l).getEnergy());
+				double mergedEnergy = mergedEnergies.containsKey(l) ? mergedEnergies.get(l) : 0;
+				mergedEnergy += agentCells.get(l).getEnergy();
+				mergedEnergies.put(l, mergedEnergy);
 			}
 		}
 
@@ -115,6 +117,8 @@ public class ComplexEnvironment extends Environment {
 			agentCells.remove(l);
 			occupiedCells.remove(l);
 		}
+
+		System.out.println("MERGE MERGE EMRGE");
 
 
 	}

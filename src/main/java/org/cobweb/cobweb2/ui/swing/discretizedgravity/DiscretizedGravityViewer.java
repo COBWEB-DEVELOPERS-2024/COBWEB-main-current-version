@@ -18,22 +18,13 @@ public class DiscretizedGravityViewer extends OverlayPluginViewer<DiscretizedGra
         super(panel);
         this.simulation = simulation;
         this.environment = simulation.theEnvironment;
-
-        // default split stuff
         this.split = new DiscretizedGravitySplit();
-        this.split.split();
-        this.split.getUpLeft().split();
-        this.split.getDownRight().split();
-        this.split.getDownRight().getDownLeft().split();
-
-        //you can get the splits from this
-        int splits = environment.getSplitCount();
 
     }
 
     @Override
     public DisplayOverlay getDrawInfo(Simulation sim) {
-        return new DiscretizedGravityOverlay(this.split);
+        return new DiscretizedGravityOverlay(environment);
     }
 
     @Override

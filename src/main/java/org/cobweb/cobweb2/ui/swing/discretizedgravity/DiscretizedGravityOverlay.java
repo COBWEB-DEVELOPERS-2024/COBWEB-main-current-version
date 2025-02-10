@@ -1,21 +1,22 @@
 package org.cobweb.cobweb2.ui.swing.discretizedgravity;
 
 import org.cobweb.cobweb2.core.Topology;
+import org.cobweb.cobweb2.impl.ComplexEnvironment;
 import org.cobweb.cobweb2.ui.swing.DisplayOverlay;
 import org.cobweb.cobweb2.ui.swing.config.DisplaySettings;
 
 import java.awt.*;
 
 public class DiscretizedGravityOverlay implements DisplayOverlay {
-    private DiscretizedGravitySplit split;
+    private ComplexEnvironment environment;
 
-    public DiscretizedGravityOverlay(DiscretizedGravitySplit split) {
-        this.split = split;
+    public DiscretizedGravityOverlay(ComplexEnvironment environment) {
+        this.environment = environment;
     }
 
-    private void drawSplit(Graphics g, DiscretizedGravitySplit currSplit, int x, int y, int width, int height) {
+    private void drawSplit(Graphics g, int currSplitNum, int x, int y, int width, int height) {
         // Base case
-        if (!currSplit.getIsSplit()) {
+        if (currSplitNum <= 1) {
             return;
         }
 
@@ -26,10 +27,10 @@ public class DiscretizedGravityOverlay implements DisplayOverlay {
         g.drawLine(x, y + newHeight, x + width, y + newHeight);
 
         // Recurse on the splits
-        drawSplit(g, currSplit.getUpLeft(), x, y, newWidth, newHeight);
-        drawSplit(g, currSplit.getUpRight(), x + newWidth, y, newWidth, newHeight);
-        drawSplit(g, currSplit.getDownLeft(), x, y + newHeight, newWidth, newHeight);
-        drawSplit(g, currSplit.getDownRight(), x + newWidth, y + newHeight, newWidth, newHeight);
+        drawSplit(g, currSplitNum - 1, x, y, newWidth, newHeight);
+        drawSplit(g, currSplitNum - 1, x + newWidth, y, newWidth, newHeight);
+        drawSplit(g, currSplitNum - 1, x, y + newHeight, newWidth, newHeight);
+        drawSplit(g, currSplitNum - 1, x + newWidth, y + newHeight, newWidth, newHeight);
     }
 
     @Override
@@ -41,6 +42,6 @@ public class DiscretizedGravityOverlay implements DisplayOverlay {
         g.drawLine(0, tileWidth * topology.height, tileWidth * topology.width, tileWidth * topology.height);
 
         // recursively draw the splits
-        drawSplit(g, this.split, 0, 0, tileWidth * topology.width, tileHeight * topology.height);
+        drawSplit(g, environment.getSplitCount(), 0, 0, tileWidth * topology.width, tileHeight * topology.height);
     }
 }
