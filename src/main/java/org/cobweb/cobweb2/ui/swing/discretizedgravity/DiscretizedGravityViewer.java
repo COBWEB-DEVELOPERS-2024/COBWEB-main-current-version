@@ -25,6 +25,10 @@ public class DiscretizedGravityViewer extends OverlayPluginViewer<DiscretizedGra
         this.split.getUpLeft().split();
         this.split.getDownRight().split();
         this.split.getDownRight().getDownLeft().split();
+
+        //you can get the splits from this
+        int splits = environment.getSplitCount();
+
     }
 
     @Override

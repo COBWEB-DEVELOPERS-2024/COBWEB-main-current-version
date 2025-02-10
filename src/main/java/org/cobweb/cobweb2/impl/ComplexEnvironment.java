@@ -1,37 +1,90 @@
 package org.cobweb.cobweb2.impl;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-import org.cobweb.cobweb2.core.Agent;
-import org.cobweb.cobweb2.core.Drop;
-import org.cobweb.cobweb2.core.Environment;
-import org.cobweb.cobweb2.core.Location;
-import org.cobweb.cobweb2.core.LocationDirection;
-import org.cobweb.cobweb2.core.SimulationInternals;
+import org.cobweb.cobweb2.core.*;
 import org.cobweb.cobweb2.plugins.EnvironmentMutator;
+import org.cobweb.cobweb2.ui.swing.discretizedgravity.DiscretizedGravitySplit;
 
-/**
- * 2D grid where agents and food live
- */
 public class ComplexEnvironment extends Environment {
 
 	protected ComplexAgentParams agentData[];
-
 	public ComplexEnvironmentParams data = new ComplexEnvironmentParams();
-
 	private Map<Class<? extends EnvironmentMutator>, EnvironmentMutator> plugins = new LinkedHashMap<>();
+
+	private double totalGridEnergy;
+	private double avgAgentEnergy;
+	private double temperature = 300; // Temporary placeholder (adjust later)
+	private int prevSplits = 1;
+
+	private Map<Location, ComplexAgent> agentCells = new HashMap<>(); // Tracks agents per discrete gravity cell
+	private Set<Location> occupiedCells = new HashSet<>(); // Prevents multiple entities in one cell
 
 	public ComplexEnvironment(SimulationInternals simulation) {
 		super(simulation);
 	}
 
+	public Collection<Agent> getAllAgents() {
+		return agentTable.values();
+	}
+
+	/**
+	 * Aggregates energy across the entire grid and computes the average energy of all agents.
+	 */
+	public void computeAggregatedEnergy() {
+		totalGridEnergy = 0;
+		int agentCount = 0;
+
+		for (Agent agent : this.getAllAgents()) {
+			if (agent == null) continue;
+			totalGridEnergy += agent.getEnergy();
+			agentCount++;
+		}
+
+		avgAgentEnergy = agentCount > 0 ? totalGridEnergy / agentCount : 0;
+	}
+
+	/**
+	 * Computes the number of splits based on total energy and temperature.
+	 * Ensures merging (unsplitting) happens when necessary.
+	 */
+	public int getSplitCount() {
+		computeAggregatedEnergy();
+
+		// Partition function Z(x) approximation
+		int computedSplits = (int) Math.floor(Math.sqrt(totalGridEnergy / (10 * temperature)));
+
+		if (computedSplits < 1) {
+			computedSplits = 1;
+		}
+
+		if (computedSplits < prevSplits) {
+			handleMerging();
+		}
+
+		prevSplits = computedSplits;
+
+		System.out.println("Total Energy: " + totalGridEnergy +
+				" | Avg Energy: " + avgAgentEnergy +
+				" | Computed Splits: " + computedSplits);
+		System.out.flush();
+
+		return computedSplits;
+	}
+
+	/**
+	 * Adds an agent to the environment, ensuring that no other entity (agent or food) exists in the same discrete gravity cell.
+	 */
 	public synchronized void addAgent(Location l, int type) {
+		if (occupiedCells.contains(l)) {
+			return; // Block addition if cell is occupied
+		}
+
 		if (!hasAgent(l) && !hasStone(l) && !hasDrop(l)) {
 			int agentType = type;
-
-			spawnAgent(new LocationDirection(l), agentType);
-
+			ComplexAgent newAgent = (ComplexAgent) spawnAgent(new LocationDirection(l), agentType);
+			agentCells.put(l, newAgent);
+			occupiedCells.add(l);
 		}
 	}
 
@@ -43,28 +96,60 @@ public class ComplexEnvironment extends Environment {
 	}
 
 	/**
-	 * Loads a new complex environment using the data held within the simulation
-	 * configuration object, p.  The following actions are performed during a load:
-	 *
-	 * <p>1. Attaches the scheduler, s, to the environment.
-	 * <br>2. Stores parameters from the file or stream in to ComplexEnvironment.
-	 * <br>3. Sets up location cache, and environment food and waste arrays.
-	 * <br>4. Keeps or removes old agents.
-	 * <br>5. Adds new stones, food, and agents.
-	 *
+	 * Ensures merging (unsplitting) happens when necessary.
+	 * Agents absorb merged energy and redundant agents are removed.
 	 */
+	private void handleMerging() {
+		Set<Location> toRemove = new HashSet<>();
+		Map<Location, Double> mergedEnergies = new HashMap<>();
+
+		for (Location l : agentCells.keySet()) {
+			if (!isCellValidForAgent(l)) {
+				toRemove.add(l);
+			} else {
+				mergedEnergies.put(l, mergedEnergies.getOrDefault(l, 0.0) + agentCells.get(l).getEnergy());
+			}
+		}
+
+		for (Location l : toRemove) {
+			agentCells.remove(l);
+			occupiedCells.remove(l);
+		}
+
+
+	}
+
+	private boolean isCellValidForAgent(Location l) {
+		return agentCells.containsKey(l) || !occupiedCells.contains(l);
+	}
+
+	@Override
+	public synchronized void update() {
+		super.update();
+		int splits = getSplitCount();
+		System.out.println("Splits in update loop: " + splits);
+		System.out.flush();
+
+		for (EnvironmentMutator v : plugins.values()) {
+			v.update();
+		}
+
+		System.out.println("Updated Agent List:");
+		for (Map.Entry<Location, ComplexAgent> entry : agentCells.entrySet()) {
+			System.out.println("Location: " + entry.getKey() + " | Energy: " + entry.getValue().getEnergy());
+		}
+		System.out.flush();
+	}
+
 	public synchronized void setParams(ComplexEnvironmentParams envParams, AgentParams agentParams, boolean keepOldAgents, boolean keepOldArray, boolean keepOldDrops) throws IllegalArgumentException {
 		data = envParams;
 		agentData = agentParams.agentParams;
-
 		super.load(data.width, data.height, data.wrapMap, keepOldArray);
 
-		// Remove old components
 		if (keepOldAgents) {
 			killOffgridAgents();
 			loadOldAgents();
 		} else {
-			// do not call clearAgents(), it invokes mutators, etc
 			agentTable.clear();
 		}
 
@@ -74,7 +159,6 @@ public class ComplexEnvironment extends Environment {
 	}
 
 	public void loadNew() {
-		// add stones in to random locations
 		for (int i = 0; i < data.initialStones; ++i) {
 			Location l;
 			int tries = 0;
@@ -90,17 +174,9 @@ public class ComplexEnvironment extends Environment {
 		}
 	}
 
-	/**
-	 * Places agents in random locations.  If prisoner's dilemma is being used,
-	 * a number of cheaters that is dependent on the probability of being a cheater
-	 * are randomly assigned to agents.
-	 */
-	// FIXME: move out to simulation?
 	public void loadNewAgents() {
 		for (int i = 0; i < agentData.length; ++i) {
-
 			for (int j = 0; j < agentData[i].initialAgents; ++j) {
-
 				Location location;
 				int tries = 0;
 				do {
@@ -114,48 +190,16 @@ public class ComplexEnvironment extends Environment {
 		}
 	}
 
-	/**
-	 * Searches through each location to find every old agent.  Each agent that is found
-	 * is added to the scheduler if the scheduler is new.  Agents that are off the new
-	 * environment are removed from the environment.
-	 */
 	private void loadOldAgents() {
-		// Add in-bounds old agents to the new scheduler and update new
-		// constants
-		// TODO: a way to keep old parameters for old agents?
 		for (int x = 0; x < topology.width; ++x) {
 			for (int y = 0; y < topology.height; ++y) {
 				Location currentPos = new Location(x, y);
 				ComplexAgent agent = (ComplexAgent) getAgent(currentPos);
 				if (agent != null) {
 					int theType = agent.getType();
-
-					/* TODO: Test this
-					if(theType < agentTable.size()) {
-						agent.setParams(agentData[theType]);
-					}
-					*/
 					agent.setParams(agentData[theType]);
 				}
 			}
-		}
-	}
-
-	/**
-	 * tickNotification is the method called by the scheduler for each of its
-	 * clients for every tick of the simulation. For environment,
-	 * tickNotification performs all of the per-tick tasks necessary for the
-	 * environment to function properly. These tasks include managing food
-	 * depletion, food growth, and random food-"dropping".
-	 */
-	@Override
-	public synchronized void update() {
-		super.update();
-
-		updateDrops();
-
-		for (EnvironmentMutator v : plugins.values()) {
-			v.update();
 		}
 	}
 
@@ -169,9 +213,6 @@ public class ComplexEnvironment extends Environment {
 		return plugin;
 	}
 
-	/**
-	 *
-	 */
 	private void updateDrops() {
 		for (int x = 0; x < topology.width; x++) {
 			for (int y = 0; y < topology.height; y++) {
