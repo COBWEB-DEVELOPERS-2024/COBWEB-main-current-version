@@ -54,8 +54,13 @@ public class ComplexEnvironment extends Environment {
 		// Partition function Z(x) approximation
 		int computedSplits = (int) Math.floor(Math.sqrt(totalGridEnergy / (10 * temperature)));
 
-		if (computedSplits < 1) {
+		// check the bounds
+		int splitLowerBound = 1;
+		int splitUpperBound = (int) (Math.log10(Math.min(topology.width, topology.height)) / Math.log10(2)) + 1;
+		if (computedSplits < splitLowerBound) {
 			computedSplits = 1;
+		} else if (computedSplits >= splitUpperBound) {
+			computedSplits = splitUpperBound;
 		}
 
 		if (computedSplits < prevSplits) {
