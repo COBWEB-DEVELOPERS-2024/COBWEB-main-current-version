@@ -4,13 +4,14 @@ import java.util.*;
 
 import org.cobweb.cobweb2.core.*;
 import org.cobweb.cobweb2.plugins.EnvironmentMutator;
-import org.cobweb.cobweb2.ui.swing.discretizedgravity.DiscretizedGravitySplit;
+import org.cobweb.cobweb2.ui.swing.discretizedgravity.DiscretizedGravityStructure;
 
 public class ComplexEnvironment extends Environment {
 
 	protected ComplexAgentParams agentData[];
 	public ComplexEnvironmentParams data = new ComplexEnvironmentParams();
 	private Map<Class<? extends EnvironmentMutator>, EnvironmentMutator> plugins = new LinkedHashMap<>();
+	private final DiscretizedGravityStructure discretizedGravityStructure = new DiscretizedGravityStructure();
 
 	private double totalGridEnergy;
 	private double avgAgentEnergy;
@@ -22,10 +23,17 @@ public class ComplexEnvironment extends Environment {
 
 	public ComplexEnvironment(SimulationInternals simulation) {
 		super(simulation);
+
+		// Test discretized gravity structure
+//		discretizedGravityStructure.makeRandomSplits(5);
 	}
 
 	public Collection<Agent> getAllAgents() {
 		return agentTable.values();
+	}
+
+	public DiscretizedGravityStructure getDiscretizedGravityStructure() {
+		return discretizedGravityStructure;
 	}
 
 	/**
