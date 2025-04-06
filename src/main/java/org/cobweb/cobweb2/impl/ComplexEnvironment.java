@@ -25,8 +25,15 @@ public class ComplexEnvironment extends Environment {
 		super(simulation);
 
 		// Test discretized gravity structure
-//		discretizedGravityStructure.makeRandomSplits(5);
+		// discretizedGravityStructure.makeRandomSplits(5);
 	}
+
+	public void applyInhomogeneousSplits(int count) {
+		System.out.println("Applying inhomogeneous splits: " + count);
+		discretizedGravityStructure.makeRandomSplits(count);
+	}
+
+
 
 	public Collection<Agent> getAllAgents() {
 		return agentTable.values();

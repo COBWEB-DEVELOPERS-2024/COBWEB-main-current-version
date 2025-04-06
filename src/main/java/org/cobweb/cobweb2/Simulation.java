@@ -41,6 +41,7 @@ import org.cobweb.cobweb2.plugins.waste.WasteMutator;
 import org.cobweb.cobweb2.ui.SimulationInterface;
 import org.cobweb.util.RandomNoGenerator;
 
+
 /**
  * This class provides the definitions for a user interface that is running
  * on a local machine.
@@ -139,6 +140,110 @@ public class Simulation implements SimulationInternals, SimulationInterface {
 		T instance = (T) ctor.newInstance(args.toArray());
 		return instance;
 	}
+
+
+	private int computeSplitCountInhomogeneous(int width) {
+		int c = (int) Math.pow(2, width); // number of potential cells
+		double x = 1.5;
+
+		Map<Integer, Map<Integer, Double>> znMap = new LinkedHashMap<Integer, Map<Integer, Double>>();
+
+		// Z1 = x
+		Map<Integer, Double> Z1 = new LinkedHashMap<Integer, Double>();
+		Z1.put(1, 1.0);
+		znMap.put(1, Z1);
+
+		int n = 4;
+		int splitCount = 0;
+
+		int n0 = 13;
+		double k = 0.5;
+
+		double decayWeight = 0.85;
+		double structureWeight = 0.15;
+
+		while (n <= c) {
+			Map<Integer, Double> prevZ = znMap.get(n - 3);
+			if (prevZ == null) break;
+
+			Map<Integer, Double> Zn = polyPower(polyAddX(prevZ, x), 4);
+			znMap.put(n, Zn);
+
+			double An = Zn.containsKey(n) ? Zn.get(n) : 0.0;
+
+			double totalCoeff = 0.0;
+			for (double coeff : Zn.values()) {
+				totalCoeff += coeff;
+			}
+
+			if (totalCoeff == 0.0) break;
+
+			double decayComponent = 1.0 / (1.0 + Math.exp(k * (n - n0)));
+			double structureComponent = An / totalCoeff;
+
+			double p = decayWeight * decayComponent + structureWeight * structureComponent;
+			p = Math.min(p, 1.0);
+
+			// System.out.printf("n = %d, An = %.2f, total = %.2f, decay = %.4f, structure = %.6f, p = %.4f%n",
+			// 		n, An, totalCoeff, decayComponent, structureComponent, p);
+
+			if (Math.random() < p) {
+				splitCount++;
+				n += 3;
+			} else {
+				break;
+			}
+		}
+
+		return splitCount;
+	}
+
+
+
+	// Add x to the polynomial: Zn(x) = Zn + x
+	private Map<Integer, Double> polyAddX(Map<Integer, Double> poly, double x) {
+		Map<Integer, Double> result = new LinkedHashMap<Integer, Double>(poly);
+		double coeff = result.containsKey(1) ? result.get(1) : 0.0;
+		result.put(1, coeff + 1.0);
+		return result;
+	}
+
+
+	// Multiply two polynomials
+	private Map<Integer, Double> polyMultiply(Map<Integer, Double> a, Map<Integer, Double> b) {
+		Map<Integer, Double> result = new LinkedHashMap<Integer, Double>();
+		for (Map.Entry<Integer, Double> termA : a.entrySet()) {
+			for (Map.Entry<Integer, Double> termB : b.entrySet()) {
+				int newExp = termA.getKey() + termB.getKey();
+				double newCoeff = termA.getValue() * termB.getValue();
+				double existing = result.containsKey(newExp) ? result.get(newExp) : 0.0;
+				result.put(newExp, existing + newCoeff);
+			}
+		}
+		return result;
+	}
+
+
+	// Raise a polynomial to an integer power
+	private Map<Integer, Double> polyPower(Map<Integer, Double> base, int power) {
+		Map<Integer, Double> result = new LinkedHashMap<>();
+		result.put(0, 1.0);
+
+		for (int i = 0; i < power; i++) {
+			result = polyMultiply(result, base);
+		}
+		return result;
+	}
+
+	// Evaluate polynomial at a specific x
+	private double evalPoly(Map<Integer, Double> poly, double x) {
+		double result = 0;
+		for (Map.Entry<Integer, Double> term : poly.entrySet()) {
+			result += term.getValue() * Math.pow(x, term.getKey());
+		}
+		return result;
+	}
+
 
 	/**
 	 * Initialize the specified environment class with state data read from the
@@ -306,6 +411,9 @@ public class Simulation implements SimulationInternals, SimulationInterface {
 
 		// Create initial environment state, spawn stones, plugins
 		theEnvironment.loadNew();
+		int inhomogeneousSplits = computeSplitCountInhomogeneous(simulationConfig.envParams.width);
+		// System.out.println("Inhomogeneous Split Count: " + inhomogeneousSplits);
+		theEnvironment.applyInhomogeneousSplits(inhomogeneousSplits);
 
 		// Create initial agent population
 		if (p.spawnNewAgents) {
