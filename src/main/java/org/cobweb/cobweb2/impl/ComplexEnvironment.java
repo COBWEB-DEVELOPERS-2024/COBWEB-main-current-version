@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.cobweb.cobweb2.core.*;
 import org.cobweb.cobweb2.plugins.EnvironmentMutator;
+import org.cobweb.cobweb2.ui.swing.discretizedgravity.DiscretizedGravitySplit;
 import org.cobweb.cobweb2.ui.swing.discretizedgravity.DiscretizedGravityStructure;
 
 public class ComplexEnvironment extends Environment {
@@ -11,7 +12,7 @@ public class ComplexEnvironment extends Environment {
 	protected ComplexAgentParams agentData[];
 	public ComplexEnvironmentParams data = new ComplexEnvironmentParams();
 	private Map<Class<? extends EnvironmentMutator>, EnvironmentMutator> plugins = new LinkedHashMap<>();
-	private final DiscretizedGravityStructure discretizedGravityStructure = new DiscretizedGravityStructure();
+	private DiscretizedGravityStructure discretizedGravityStructure;
 
 	private double totalGridEnergy;
 	private double avgAgentEnergy;
@@ -23,17 +24,24 @@ public class ComplexEnvironment extends Environment {
 
 	public ComplexEnvironment(SimulationInternals simulation) {
 		super(simulation);
-
-		// Test discretized gravity structure
-		// discretizedGravityStructure.makeRandomSplits(5);
 	}
 
 	public void applyInhomogeneousSplits(int count) {
 		System.out.println("Applying inhomogeneous splits: " + count);
 		discretizedGravityStructure.makeRandomSplits(count);
+
+		// Example of making discretized gravity structure and getting average size (DELETE AFTER DISCRETIZED GRAVITY IS FINISHED)
+//		discretizedGravityStructure.makeSplitAtIndex(0);
+//		discretizedGravityStructure.makeSplitAtIndex(0);
+//		discretizedGravityStructure.makeSplitAtIndex(6);
+//		discretizedGravityStructure.makeSplitAtIndex(8);
+//		discretizedGravityStructure.makeSplitAtIndex(3);
+//		discretizedGravityStructure.makeUnSplitAtIndexParent(10);
+//		discretizedGravityStructure.makeSplitAtIndex(9);
+//		discretizedGravityStructure.makeUnSplitAtIndexParent(3);
+//		discretizedGravityStructure.makeSplitAtIndex(7);
+//		System.out.println("Average plaq size: " + discretizedGravityStructure.getAvgPlaquetteSize());
 	}
-
-
 
 	public Collection<Agent> getAllAgents() {
 		return agentTable.values();
@@ -158,6 +166,13 @@ public class ComplexEnvironment extends Environment {
 			v.update();
 		}
 
+		// Example of how to get the amount of agents in a split (DELETE AFTER DISCRETIZED GRAVITY IS FINISHED)
+//		for (int i = 0; i < discretizedGravityStructure.getNumPlaquettes(); i++) {
+//			DiscretizedGravitySplit split = discretizedGravityStructure.getSplitAtIndex(i);
+//			System.out.println("Agents in split " + i + ": " + split.getAgents(agentTable.values()).size());
+//		}
+//		System.out.println("Total agents: " + agentTable.size());
+
 		System.out.println("Updated Agent List:");
 		for (Map.Entry<Location, ComplexAgent> entry : agentCells.entrySet()) {
 			System.out.println("Location: " + entry.getKey() + " | Energy: " + entry.getValue().getEnergy());
@@ -169,6 +184,8 @@ public class ComplexEnvironment extends Environment {
 		data = envParams;
 		agentData = agentParams.agentParams;
 		super.load(data.width, data.height, data.wrapMap, keepOldArray);
+
+		discretizedGravityStructure = new DiscretizedGravityStructure(Math.min(data.width, data.height));
 
 		if (keepOldAgents) {
 			killOffgridAgents();

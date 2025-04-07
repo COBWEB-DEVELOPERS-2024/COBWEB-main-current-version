@@ -1,9 +1,14 @@
 package org.cobweb.cobweb2.ui.swing.discretizedgravity;
-import org.cobweb.cobweb2.ui.swing.discretizedgravity.DiscretizedGravitySplit;
 
 public class DiscretizedGravityStructure {
-    private final DiscretizedGravitySplit baseSplit = new DiscretizedGravitySplit();;
+    private final DiscretizedGravitySplit baseSplit;
     private int numSplits = 0;
+    private final int topologySize;
+
+    public DiscretizedGravityStructure(int topologySize) {
+        this.baseSplit = new DiscretizedGravitySplit(null, 0, topologySize, 0, topologySize);
+        this.topologySize = topologySize;
+    }
 
     public DiscretizedGravitySplit getBaseSplit() {
         return baseSplit;
@@ -15,6 +20,10 @@ public class DiscretizedGravityStructure {
 
     public int getNumPlaquettes() {
         return 3 * numSplits + 1;
+    }
+
+    public float getAvgPlaquetteSize() {
+        return (float) (topologySize * topologySize) / getNumPlaquettes();
     }
 
     public DiscretizedGravitySplit getSplitAtIndex(int index) {
@@ -58,6 +67,17 @@ public class DiscretizedGravityStructure {
         DiscretizedGravitySplit splitAtIndex = getSplitAtIndex(index);
         splitAtIndex.split();
         numSplits++;
+//        System.out.println("Num plaquettes: " + getNumPlaquettes());
+    }
+
+    public void makeUnSplitAtIndexParent(int index) {
+        if (index >= getNumPlaquettes()) {
+            System.out.println("Could not make split at index " + index);
+            return;
+        }
+        DiscretizedGravitySplit splitAtIndex = getSplitAtIndex(index);
+        numSplits -= splitAtIndex.getParentSplit().unSplit();
+//        System.out.println("Num plaquettes: " + getNumPlaquettes());
     }
 
     public void makeRandomSplits(int splitAmount) {

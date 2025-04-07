@@ -7,19 +7,14 @@ import org.cobweb.cobweb2.ui.swing.DisplayPanel;
 import org.cobweb.cobweb2.ui.swing.OverlayGenerator;
 import org.cobweb.cobweb2.ui.swing.OverlayPluginViewer;
 
-import java.util.List;
-
 public class DiscretizedGravityViewer extends OverlayPluginViewer<DiscretizedGravityViewer> implements OverlayGenerator {
     private Simulation simulation;
     private ComplexEnvironment environment;
-    private DiscretizedGravitySplit split;
 
     public DiscretizedGravityViewer(DisplayPanel panel, Simulation simulation) {
         super(panel);
         this.simulation = simulation;
         this.environment = simulation.theEnvironment;
-        this.split = new DiscretizedGravitySplit();
-
     }
 
     @Override
